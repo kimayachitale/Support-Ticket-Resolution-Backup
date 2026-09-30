@@ -2,7 +2,7 @@
 import json
 import re
 
-client = genai.Client(api_key="GOOGLE_API_KEY")
+client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
 
 def _generate_with_fallback(prompt, max_tokens=150, temperature=0.3):
