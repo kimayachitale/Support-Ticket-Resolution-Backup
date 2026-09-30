@@ -1,4 +1,5 @@
-﻿from google import genai
+﻿import os
+from google import genai
 import json
 import re
 
