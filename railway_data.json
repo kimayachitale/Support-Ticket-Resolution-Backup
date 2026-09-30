@@ -1,0 +1,34 @@
+[
+    {
+        "pnr_number": "1234567890",
+        "train_name": "Rajdhani Express",
+        "journey_date": "2026-08-20",
+        "status": "Cancelled",
+        "fare": 2500,
+        "payment_mode": "UPI"
+    },
+    {
+        "pnr_number": "2345678901",
+        "train_name": "Duronto Express",
+        "journey_date": "2026-08-22",
+        "status": "Cancelled",
+        "fare": 1800,
+        "payment_mode": "Card"
+    },
+    {
+        "pnr_number": "3456789012",
+        "train_name": "Vande Bharat Express",
+        "journey_date": "2026-08-25",
+        "status": "Cancelled",
+        "fare": 1600,
+        "payment_mode": "UPI"
+    },
+    {
+        "pnr_number": "4567890123",
+        "train_name": "Shatabdi Express",
+        "journey_date": "2026-08-28",
+        "status": "Cancelled",
+        "fare": 1200,
+        "payment_mode": "Net Banking"
+    }
+]

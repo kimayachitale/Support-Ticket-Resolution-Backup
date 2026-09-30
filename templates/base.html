@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Railway Support Ticket Resolution Platform{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+    {% block extra_css %}{% endblock %}
+
+    <style>
+    * {
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    html {
+        scroll-behavior: smooth;
+    }
+    @keyframes fadeInUp {
+        from { opacity: 0; transform: translateY(24px); }
+        to   { opacity: 1; transform: translateY(0); }
+    }
+    .fade-in      { animation: fadeInUp .7s ease both; }
+    .fade-in-1    { animation: fadeInUp .7s ease both; animation-delay: .1s; }
+    .fade-in-2    { animation: fadeInUp .7s ease both; animation-delay: .2s; }
+    .fade-in-3    { animation: fadeInUp .7s ease both; animation-delay: .3s; }
+
+    a {
+        transition: color .2s ease, opacity .2s ease;
+    }
+    a:hover {
+        opacity: .85;
+    }
+    #mainNav {
+        transition: background .3s ease, box-shadow .3s ease,
+                    backdrop-filter .3s ease, -webkit-backdrop-filter .3s ease;
+    }
+    #mainNav.scrolled {
+        background: rgba(20,20,22,0.85);
+        box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+    }
+    .btn, .primary-btn, .submit-btn, .decide-btn, .helpline-btn, .tab-btn {
+        transition: all .25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .btn:hover, .primary-btn:hover, .submit-btn:hover, .decide-btn:hover, .helpline-btn:hover, .tab-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(255,255,255,0.12);
+    }
+    .btn:active, .primary-btn:active, .submit-btn:active, .decide-btn:active, .helpline-btn:active, .tab-btn:active {
+        transform: translateY(0) scale(0.98);
+    }
+    body{
+        background: linear-gradient(135deg,
+            #1c1a24 0%, #2a2530 25%, #1a1a1d 50%, #252027 75%, #1c1a24 100%);
+        background-size: 400% 400%;
+        animation: gradientShift 25s ease infinite;
+        min-height: 100vh;
+        color: #f5f5f4;
+        position: relative;
+        isolation: isolate;
+    }
+    @keyframes gradientShift{
+        0%{background-position:0% 50%;}
+        50%{background-position:100% 50%;}
+        100%{background-position:0% 50%;}
+    }
+    body::before{
+        content:"";
+        position:fixed;
+        inset:0;
+        pointer-events:none;
+        z-index:-1;
+        background:
+            radial-gradient(circle at 15% 20%, rgba(120,200,255,.07), transparent 40%),
+            radial-gradient(circle at 85% 80%, rgba(255,180,80,.06), transparent 40%),
+            radial-gradient(circle at 50% 50%, rgba(160,120,255,.05), transparent 50%);
+    }
+    .glass-card{
+        backdrop-filter: blur(24px) saturate(140%);
+        -webkit-backdrop-filter: blur(24px) saturate(140%);
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.1);
+        border-radius: 18px;
+        transition: transform .35s cubic-bezier(0.4,0,0.2,1),
+                    background .35s ease,
+                    border-color .35s ease,
+                    box-shadow .35s ease;
+    }
+    .glass-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+        border-color: rgba(255,255,255,0.14);
+    }
+    .glass-card.no-lift:hover {
+        transform: none;
+    }
+    .tab-btn:focus,
+    .tab-btn:focus-visible,
+    .tab-btn:active{
+        outline: none;
+        box-shadow: none;
+        border-bottom: none;
+        text-decoration: none;
+    }
+    </style>
+</head>
+
+<body>
+
+<!-- Navbar -->
+
+<nav class="navbar" id="mainNav">
+
+    <div class="logo">
+        🚆 Railway AI
+    </div>
+
+    <ul>
+
+        <li>
+            <a href="/">
+                <i class="fa-solid fa-house"></i>
+                Home
+            </a>
+        </li>
+
+        <li>
+            <a href="/">
+                <i class="fa-solid fa-file-circle-plus"></i>
+                Complaint
+            </a>
+        </li>
+
+        <li>
+            <a href="/history">
+                <i class="fa-solid fa-chart-column"></i>
+                Dashboard
+            </a>
+        </li>
+
+    </ul>
+
+</nav>
+
+
+<!-- Main -->
+
+<div class="main-content">
+
+{% block content %}
+
+{% endblock %}
+
+</div>
+
+
+<!-- Footer -->
+
+<footer>
+
+    <h3>Railway Support Ticket Resolution Platform</h3>
+
+    <p>
+        AI Powered Passenger Complaint Resolution System
+    </p>
+
+</footer>
+
+<script>
+window.addEventListener('scroll', function() {
+  const nav = document.getElementById('mainNav');
+  if (!nav) return;
+  if (window.scrollY > 20) nav.classList.add('scrolled');
+  else nav.classList.remove('scrolled');
+});
+</script>
+
+{% block extra_js %}{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,1525 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Railway Support Ticket Resolution Platform</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in      { animation: fadeInUp .7s ease both; }
+.fade-in-1    { animation: fadeInUp .7s ease both; animation-delay: .1s; }
+.fade-in-2    { animation: fadeInUp .7s ease both; animation-delay: .2s; }
+.fade-in-3    { animation: fadeInUp .7s ease both; animation-delay: .3s; }
+
+a {
+    transition: color .2s ease, opacity .2s ease;
+}
+
+a:hover {
+    opacity: .85;
+}
+
+/* ====== GLASSMORPHISM GLOBAL OVERRIDES ====== */
+
+body{
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+    line-height:1.65;
+    background: linear-gradient(135deg,
+        #1c1a24 0%, #2a2530 25%, #1a1a1d 50%, #252027 75%, #1c1a24 100%);
+    background-size: 400% 400%;
+    animation: gradientShift 25s ease infinite;
+    min-height: 100vh;
+    color: #f5f5f4;
+    position:relative;
+    isolation: isolate;
+}
+
+@keyframes gradientShift{
+    0%{background-position:0% 50%;}
+    50%{background-position:100% 50%;}
+    100%{background-position:0% 50%;}
+}
+
+body::before{
+    content:"";
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    z-index:-1;
+    background:
+        radial-gradient(circle at 15% 20%, rgba(120,200,255,.07), transparent 40%),
+        radial-gradient(circle at 85% 80%, rgba(255,180,80,.06), transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(160,120,255,.05), transparent 50%);
+}
+
+body > *{ position:relative; z-index:1; }
+
+h1,h2,h3,h4,h5,h6{
+    font-weight:600;
+    letter-spacing:-0.01em;
+    color:#fafafa;
+}
+
+.glass-card{
+    background: rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(24px) saturate(140%);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    transition: transform .35s cubic-bezier(0.4,0,0.2,1),
+                background .35s ease,
+                border-color .35s ease,
+                box-shadow .35s ease;
+}
+
+.glass-card:hover{
+    transform: translateY(-4px);
+    box-shadow: 0 16px 48px rgba(0,0,0,0.4);
+    border-color: rgba(255,255,255,0.14);
+}
+
+.glass-card.no-lift:hover {
+    transform: none;
+}
+
+/* ====== END GLASSMORPHISM GLOBAL OVERRIDES ====== */
+
+/* ---------------- NAVBAR ---------------- */
+
+.navbar{
+    height:70px;
+    background: rgba(20, 20, 22, 0.7);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:0 40px;
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
+    position:sticky;
+    top:0;
+    z-index:100;
+    transition: background .3s ease, box-shadow .3s ease,
+                backdrop-filter .3s ease, -webkit-backdrop-filter .3s ease;
+}
+
+#mainNav.scrolled {
+    background: rgba(20,20,22,0.85);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+}
+
+.logo{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.logo-circle{
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    background:#0f4c81;
+    color:white;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:24px;
+}
+
+.logo h2{
+    color:#fafafa;
+    font-size:22px;
+}
+
+.nav-links{
+    display:flex;
+    gap:20px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:#f5f5f4;
+    font-weight:600;
+    transition: color 0.25s ease;
+}
+
+.nav-links a:hover{
+    color:#ffffff;
+}
+
+/* ---------------- HERO ---------------- */
+
+.hero{
+    padding: 80px 40px;
+    border-radius: 24px;
+    margin: 32px auto;
+    max-width: 1200px;
+    background: rgba(255,255,255,0.03);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid rgba(255,255,255,0.06);
+    position: relative;
+    overflow: hidden;
+    color:#fafafa;
+}
+
+/* Blurred, dimmed train image overlay */
+.hero::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background-image: url("https://images.unsplash.com/photo-1474487548417-781cb71495f3?auto=format&fit=crop&w=1500&q=80");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
+    opacity: 0.5;
+    filter: blur(12px) brightness(.4) saturate(.7);
+    -webkit-filter: blur(12px) brightness(.4) saturate(.7);
+    z-index:0;
+}
+
+/* Soft internal radial glows */
+.hero::after{
+    content:"";
+    position:absolute;
+    inset:0;
+    background:
+        radial-gradient(circle at 70% 30%, rgba(0,229,255,.05), transparent 50%),
+        radial-gradient(circle at 20% 80%, rgba(255,180,80,.04), transparent 50%);
+    z-index:0;
+    pointer-events:none;
+}
+
+.hero-content{
+    position:relative;
+    z-index:1;
+    max-width:650px;
+}
+
+.hero h1{
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    color: #fafafa;
+    margin-bottom: 16px;
+    text-shadow: 0 0 40px rgba(255,255,255,.08);
+}
+
+.hero p{
+    font-size: 16px;
+    color: #a3a3a0;
+    max-width: 560px;
+    line-height: 1.6;
+    margin-bottom: 32px;
+}
+
+/* Live indicator */
+.hero-status {
+    display: inline-flex;
+    align-items: center;
+    font-size: 13px;
+    font-weight: 500;
+    color: #a3a3a0;
+    margin-bottom: 24px;
+}
+
+.live-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background: #34d399;
+    border-radius: 50%;
+    margin-right: 6px;
+    position: relative;
+    animation: pulseDot 2s ease-in-out infinite;
+}
+
+.live-dot::after {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: rgba(52,211,153,.4);
+    animation: pulseRing 2s ease-out infinite;
+}
+
+@keyframes pulseDot {
+    0%,100% { opacity: 1; }
+    50% { opacity: .5; }
+}
+
+@keyframes pulseRing {
+    0% { transform: scale(.8); opacity: .8; }
+    100% { transform: scale(2); opacity: 0; }
+}
+
+.hero-buttons{
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* Primary button - glassmorphism style */
+.primary-btn{
+    background: linear-gradient(135deg, #f5f5f4 0%, #e0e0dd 100%);
+    color: #1a1a1d;
+    padding:12px 24px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:600;
+    transition: all .25s cubic-bezier(0.4, 0, 0.2, 1);
+    display:inline-block;
+}
+
+.primary-btn:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15);
+}
+
+.primary-btn:active{
+    transform: translateY(0) scale(0.98);
+}
+
+/* Secondary button - glassmorphism style */
+.secondary-btn{
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #f5f5f4;
+    padding:12px 24px;
+    border-radius:12px;
+    text-decoration:none;
+    font-weight:600;
+    transition: all .25s cubic-bezier(0.4, 0, 0.2, 1);
+    display:inline-block;
+}
+
+.secondary-btn:hover{
+    background: rgba(255, 255, 255, 0.10);
+    border-color: rgba(255, 255, 255, 0.22);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.12);
+}
+
+.secondary-btn:active{
+    transform: translateY(0) scale(0.98);
+}
+
+/* ---------------- FEATURES ---------------- */
+
+.features{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    max-width: 1200px;
+    margin: 24px auto;
+    padding: 0 32px;
+}
+
+.feature-card{
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius:18px;
+    padding:24px;
+    text-align:center;
+    box-shadow:0 8px 32px rgba(0,0,0,0.25);
+    transition: all 0.3s ease;
+    color:#f5f5f4;
+}
+
+.feature-card:hover{
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    transform: translateY(-4px);
+}
+
+.feature-card p{
+    font-size: 13px;
+    color: #8a8a86;
+    text-align: center;
+    line-height: 1.5;
+}
+
+.feature-icon{
+    font-size: 32px;
+    margin-bottom: 12px;
+    display: block;
+    text-align: center;
+}
+
+.feature-card h3{
+    font-size: 15px;
+    font-weight: 600;
+    color: #fafafa;
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+/* ---------------- FORM ---------------- */
+
+.container{
+    width:92%;
+    max-width: 1000px;
+    margin: 40px auto;
+}
+
+.form-card{
+    max-width: 720px;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius:20px;
+    padding: 40px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.25);
+    color:#f5f5f4;
+}
+
+.form-title{
+    font-size: 22px;
+    font-weight: 600;
+    color: #fafafa;
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+textarea, input, select{
+    transition: border-color .25s ease,
+                box-shadow .25s ease,
+                background .25s ease;
+}
+
+textarea{
+    width:100%;
+    height:170px;
+    resize:none;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius:12px;
+    color: #f5f5f4;
+    padding:16px;
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+}
+
+textarea::placeholder{
+    color:#8a8a86;
+}
+
+textarea:focus, input:focus, select:focus{
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.25);
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.06);
+}
+
+.field-label{
+    display:block;
+    font-size: 13px;
+    font-weight: 500;
+    color: #d4d4d4;
+    margin-bottom: 8px;
+    letter-spacing: 0.02em;
+}
+
+.form-field{
+    margin-bottom: 20px;
+}
+
+.form-input{
+    width:100%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius:12px;
+    color: #f5f5f4;
+    padding:16px;
+    font-family:'Inter',sans-serif;
+    font-size:15px;
+}
+
+.form-input::placeholder{
+    color:#8a8a86;
+}
+
+.error-msg{
+    display:none;
+}
+
+.error-msg.visible{
+    display:block;
+}
+
+.error{
+    font-size: 12px;
+    color: #f87171;
+    margin-top: 6px;
+    font-weight: 500;
+    min-height: 16px;
+    display:block;
+}
+
+@keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+#analyzeBtn:disabled,
+#analyzeBtn.loading {
+    background: linear-gradient(90deg,
+      rgba(255,255,255,.15) 0%,
+      rgba(255,255,255,.3) 50%,
+      rgba(255,255,255,.15) 100%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s linear infinite;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.submit-btn:disabled:hover{
+    transform:none;
+    box-shadow:none;
+}
+
+.action-buttons{
+    display: flex;
+    gap: 12px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+}
+
+/* Primary button (glass) */
+button{
+    border:none;
+    cursor:pointer;
+    padding:12px 24px;
+    border-radius:12px;
+    font-size:15px;
+    font-weight:600;
+    font-family:'Inter',sans-serif;
+    transition: all .25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255,255,255,0.12);
+}
+
+button:active{
+    transform: translateY(0) scale(0.98);
+}
+
+.submit-btn{
+    background: linear-gradient(135deg, #f5f5f4 0%, #e0e0dd 100%);
+    color: #1a1a1d;
+}
+
+.submit-btn:hover:not(:disabled){
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.15);
+}
+
+.submit-btn:active:not(:disabled){
+    transform: translateY(0) scale(0.98);
+}
+
+/* Secondary button (glass) */
+.voice-btn{
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #f5f5f4;
+}
+
+.voice-btn:hover{
+    background: rgba(255, 255, 255, 0.10);
+    border-color: rgba(255, 255, 255, 0.22);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(255, 255, 255, 0.12);
+}
+
+.voice-btn:active{
+    transform: translateY(0) scale(0.98);
+}
+
+/* ---------------- ERROR ALERT ---------------- */
+
+.error-alert {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgba(127, 29, 29, 0.25);
+    border: 1px solid rgba(239, 68, 68, 0.4);
+    border-left: 6px solid #ef4444;
+    border-radius: 14px;
+    padding: 18px 22px;
+    margin-bottom: 22px;
+    animation: fadeInDown .35s ease;
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+}
+
+.error-alert-icon {
+    font-size: 26px;
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.error-alert-body strong {
+    display: block;
+    color: #fca5a5;
+    font-size: 16px;
+    margin-bottom: 4px;
+}
+
+.error-alert-body span {
+    color: #fecaca;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+@keyframes fadeInDown {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------------- RESULT ---------------- */
+
+.result{
+    max-width: 1000px;
+    margin: 32px auto;
+    padding: 32px 24px;
+    background: rgba(255, 255, 255, 0.04);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    color: #f5f5f4;
+}
+
+.result h2, .result h3{
+    color:#fafafa;
+}
+
+.result-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    gap:18px;
+}
+
+.overview-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:16px;
+    margin-bottom:24px;
+}
+
+.overview-card{
+    background:rgba(255,255,255,.04);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border:1px solid rgba(255,255,255,.08);
+    border-left:3px solid rgba(255,255,255,.2);
+    border-radius:18px;
+    padding:20px;
+    box-shadow:0 8px 32px rgba(0,0,0,0.25);
+    transition:all .3s ease;
+}
+
+.overview-card:hover{
+    background:rgba(255,255,255,.06);
+    border-color:rgba(255,255,255,.14);
+}
+
+.overview-label{
+    font-size:12px;
+    text-transform:uppercase;
+    letter-spacing:.08em;
+    color:#8a8a86;
+    margin-bottom:8px;
+}
+
+.overview-value{
+    font-size:20px;
+    font-weight:600;
+    color:#fafafa;
+}
+
+.overview-card.priority-high{
+    border-left-color:#f87171;
+}
+
+.overview-card.priority-medium{
+    border-left-color:#fbbf24;
+}
+
+.overview-card.priority-low{
+    border-left-color:#34d399;
+}
+
+/* ---------------- CLARIFICATIONS ---------------- */
+
+.clarifications-card{
+    padding:32px;
+    margin-top:30px;
+    border-radius:18px;
+}
+
+.clarifications-heading{
+    font-size:20px;
+    font-weight:600;
+    color:#fafafa;
+    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.clarifications-desc{
+    font-size:14px;
+    color:#8a8a86;
+    margin-bottom:24px;
+    line-height:1.6;
+}
+
+.question-block{
+    background:rgba(255,255,255,.03);
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:14px;
+    padding:20px;
+    margin-bottom:16px;
+    transition:all .3s ease;
+}
+
+.question-block:hover{
+    background:rgba(255,255,255,.05);
+}
+
+.question-text{
+    font-size:15px;
+    font-weight:600;
+    color:#fafafa;
+    margin-bottom:14px;
+}
+
+.radio-group{
+    display:flex;
+    flex-direction:column;
+    gap:4px;
+}
+
+.radio-label{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:10px 14px;
+    border-radius:10px;
+    font-size:14px;
+    color:#d4d4d4;
+    cursor:pointer;
+    transition:all .2s ease;
+    margin-bottom:4px;
+}
+
+.radio-label:hover{
+    background:rgba(255,255,255,.05);
+    color:#fafafa;
+}
+
+.radio-input{
+    accent-color:#fafafa;
+    width:18px;
+    height:18px;
+    cursor:pointer;
+}
+
+.other-input{
+    display:none;
+    margin-top:10px;
+    width:100%;
+}
+
+.decide-btn{
+    background:linear-gradient(135deg,#f5f5f4,#e0e0dd);
+    color:#1a1a1d;
+    border:none;
+    border-radius:12px;
+    padding:14px 28px;
+    font-size:15px;
+    font-weight:600;
+    width:100%;
+    max-width:320px;
+    margin-top:24px;
+    cursor:pointer;
+    transition:all .25s cubic-bezier(0.4, 0, 0.2, 1);
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+}
+
+.decide-btn:hover{
+    transform:translateY(-2px);
+    box-shadow:0 8px 24px rgba(255,255,255,.15);
+}
+
+.decide-btn:active{
+    transform:translateY(0) scale(0.98);
+}
+
+/* ---------------- HELPLINE SECTION ---------------- */
+
+.helpline-section{
+    background:rgba(52,211,153,.06);
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
+    border:1px solid rgba(52,211,153,.2);
+    border-radius:18px;
+    padding:28px;
+    margin-top:24px;
+    text-align:center;
+}
+
+.helpline-heading{
+    font-size:20px;
+    font-weight:600;
+    color:#fafafa;
+    margin-bottom:8px;
+}
+
+.helpline-desc{
+    font-size:14px;
+    color:#a3a3a0;
+    margin-bottom:20px;
+    line-height:1.6;
+}
+
+.helpline-buttons{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    flex-wrap:wrap;
+    margin-bottom:12px;
+}
+
+.helpline-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    background:rgba(52,211,153,.15);
+    border:1px solid rgba(52,211,153,.3);
+    border-radius:12px;
+    padding:14px 24px;
+    font-size:18px;
+    font-weight:600;
+    color:#34d399;
+    text-decoration:none;
+    margin:6px;
+    transition:all .25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.helpline-btn:hover{
+    background:rgba(52,211,153,.25);
+    transform:translateY(-2px);
+    box-shadow:0 8px 24px rgba(52,211,153,.2);
+}
+
+.helpline-btn:active{
+    transform:translateY(0) scale(0.98);
+}
+
+.card{
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-left:5px solid #60a5fa;
+    border-radius:12px;
+    padding:18px;
+    color:#f5f5f4;
+}
+
+.card b{
+    color:#fafafa;
+}
+
+.card span{
+    color:#f5f5f4 !important;
+}
+
+.reply{
+    margin-top:25px;
+    background: rgba(37, 99, 235, 0.10);
+    border-left:6px solid #60a5fa;
+    padding:22px;
+    border-radius:15px;
+    line-height:1.8;
+    color:#e0e0e0;
+}
+
+/* ---------------- FOOTER ---------------- */
+
+.footer{
+    background: rgba(20, 20, 22, 0.6);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    color:#a3a3a0;
+    text-align:center;
+    padding:22px;
+    margin-top:60px;
+}
+
+/* ---------------- MOBILE FALLBACK (<768px) ---------------- */
+
+@media(max-width: 768px){
+
+    .hero{
+        padding: 56px 24px;
+        margin: 20px 16px;
+        border-radius: 20px;
+    }
+
+    .hero h1{
+        font-size: 1.75rem;
+    }
+
+    .features{
+        grid-template-columns: 1fr;
+        padding: 0 16px;
+        margin: 20px auto;
+        gap: 12px;
+    }
+
+    .container{
+        max-width: 100%;
+        width: calc(100% - 32px);
+        margin: 24px auto;
+    }
+
+    .form-card{
+        padding: 24px;
+    }
+
+    .navbar{
+        padding: 0 20px;
+    }
+
+    .logo h2{
+        font-size: 18px;
+    }
+
+    .nav-links a{
+        font-size: 14px;
+    }
+
+    /* Mobile Fallback (<768px) */
+    .overview-grid{
+        grid-template-columns: 1fr !important;
+    }
+
+    .radio-label{
+        width: 100% !important;
+    }
+
+    .helpline-buttons{
+        flex-direction: column !important;
+        align-items: stretch !important;
+    }
+
+    .helpline-btn{
+        width: 100% !important;
+        justify-content: center !important;
+        margin: 6px 0 !important;
+    }
+
+    .result{
+        padding: 24px 16px;
+    }
+}
+
+</style>
+
+</head>
+
+<body>
+<!-- ================= NAVBAR ================= -->
+
+<div class="navbar">
+
+    <div class="logo">
+
+        <div class="logo-circle">🚆</div>
+
+        <h2>Railway AI Support</h2>
+
+    </div>
+
+    <div class="nav-links">
+
+        <a href="#">Home</a>
+
+        <a href="#complaintForm">Complaint</a>
+
+        <a href="/history">Dashboard</a>
+
+    </div>
+
+</div>
+
+<!-- ================= HERO ================= -->
+
+<section class="hero">
+
+    <div class="hero-content">
+
+        <h1>Railway Support Ticket Resolution Platform</h1>
+
+        <p>
+
+            AI-powered complaint resolution system inspired by RailMadad.
+            Register railway complaints, check refund eligibility,
+            track complaint status and receive intelligent responses instantly.
+
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="#complaintForm" class="primary-btn">
+
+                Register Complaint
+
+            </a>
+
+            <a href="/history" class="secondary-btn">
+
+                Open Dashboard
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+<!-- ================= FEATURES ================= -->
+
+<section class="features">
+
+    <div class="feature-card glass-card">
+
+        <div class="feature-icon">🎫</div>
+
+        <h3>Complaint Registration</h3>
+
+        <p>Register railway complaints quickly using AI assistance.</p>
+
+    </div>
+
+    <div class="feature-card glass-card">
+
+        <div class="feature-icon">💰</div>
+
+        <h3>Refund Checker</h3>
+
+        <p>Automatically verify refund eligibility using PNR details.</p>
+
+    </div>
+
+    <div class="feature-card glass-card">
+
+        <div class="feature-icon">🤖</div>
+
+        <h3>AI Support</h3>
+
+        <p>Receive intelligent complaint analysis and suggestions.</p>
+
+    </div>
+
+    <div class="feature-card glass-card">
+
+        <div class="feature-icon">📊</div>
+
+        <h3>Dashboard</h3>
+
+        <p>View complaint history, analytics and reports.</p>
+
+    </div>
+
+</section>
+
+<!-- ================= FORM ================= -->
+
+<div class="container">
+
+<div class="form-card glass-card" id="complaintForm">
+
+<h2 class="form-title">
+🚆 Register Railway Complaint
+</h2>
+
+{% if error_message %}
+<div style="
+    background:#fff5f5;
+    border:1px solid #f5c6cb;
+    border-left:5px solid #dc3545;
+    color:#721c24;
+    border-radius:10px;
+    padding:16px 20px;
+    margin-bottom:20px;
+    font-size:15px;
+    line-height:1.6;
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+" role="alert">
+    <span style="font-size:22px;flex-shrink:0;">🚫</span>
+    <div>
+        <strong>Invalid Complaint</strong><br>
+        {{ error_message | replace("❌ Invalid Complaint: ", "") }}
+    </div>
+</div>
+{% endif %}
+
+<form action="/analyze" method="POST" id="analyzeForm">
+
+<div class="form-field">
+<label class="field-label" for="passengerName">Passenger Name *</label>
+<input
+    class="form-input"
+    id="passengerName"
+    name="name"
+    type="text"
+    required
+    placeholder="Enter passenger name"
+    value="{{ passenger_name if passenger_name else '' }}"
+    autocomplete="name">
+<div class="error-msg"><small class="error" id="nameError"></small></div>
+</div>
+
+<div class="form-field">
+<label class="field-label" for="pnr">PNR Number *</label>
+<input
+    class="form-input"
+    id="pnr"
+    name="pnr"
+    type="text"
+    inputmode="numeric"
+    maxlength="10"
+    pattern="[0-9]{10}"
+    required
+    placeholder="Enter 10-digit PNR"
+    value="{{ pnr_input if pnr_input else '' }}"
+    autocomplete="off">
+<div class="error-msg"><small class="error" id="pnrError"></small></div>
+</div>
+
+<div class="form-field">
+<label class="field-label" for="complaint">Complaint *</label>
+<textarea
+id="complaint"
+name="ticket"
+required
+placeholder="Describe your railway complaint (minimum 10 characters)...
+
+Example:
+My train is delayed by 5 hours.">{{ complaint if complaint else "" }}</textarea>
+<div class="error-msg"><small class="error" id="complaintError"></small></div>
+</div>
+
+<div class="action-buttons">
+
+<button
+type="button"
+class="voice-btn"
+onclick="startRecognition()">
+
+🎤 Speak Complaint
+
+</button>
+
+<button
+id="analyzeBtn"
+type="submit"
+class="submit-btn"
+disabled>
+
+🔍 Analyze Complaint
+
+</button>
+
+</div>
+
+</form>
+</div>   <!-- form-card close -->
+
+{% if category %}
+
+<div class="result glass-card" id="analysisResult">
+
+<h2 style="margin-bottom:24px; color:#fafafa; font-size:22px; font-weight:600;">
+📋 Complaint Overview
+</h2>
+
+<div class="overview-grid">
+
+<div class="overview-card glass-card">
+<div class="overview-label">Complaint Category</div>
+<div class="overview-value">{{category}}</div>
+</div>
+
+<div class="overview-card glass-card {% if priority in ['Critical', 'High'] %}priority-high{% elif priority == 'Low' %}priority-low{% else %}priority-medium{% endif %}">
+<div class="overview-label">Priority Level</div>
+<div class="overview-value">{{priority}}</div>
+</div>
+
+<div class="overview-card glass-card">
+<div class="overview-label">PNR Number</div>
+<div class="overview-value">{{pnr_number}}</div>
+</div>
+
+</div>
+
+<!-- ════════════ PHASE 1: CLARIFYING QUESTIONS FORM ════════════ -->
+{% if questions and not decision %}
+<div class="clarifications-card glass-card">
+    <h3 class="clarifications-heading">
+        <span>🤖</span> Quick Clarifications for Accurate Decision
+    </h3>
+    <p class="clarifications-desc">
+        Please answer the quick multiple-choice questions below so our decision engine can determine your exact refund eligibility:
+    </p>
+
+    <form action="/decide" method="POST" id="clarifyForm">
+        <input type="hidden" name="complaint" value="{{ complaint }}">
+        <input type="hidden" name="category" value="{{ category }}">
+        <input type="hidden" name="priority" value="{{ priority }}">
+        <input type="hidden" name="pnr" value="{{ pnr_number }}">
+
+        {% for q in questions %}
+        {% set outer_index = loop.index %}
+        <div class="question-block">
+            <p class="question-text">
+                {{ outer_index }}. {{ q.question }}
+            </p>
+            <div class="radio-group">
+                {% for opt in q.options %}
+                <label class="radio-label">
+                    <input type="radio"
+                           name="answer_{{ outer_index }}"
+                           value="{{ opt }}"
+                           onclick="toggleOther(this)"
+                           class="radio-input"
+                           required>
+                    <span>{{ opt }}</span>
+                </label>
+                {% endfor %}
+            </div>
+            <input type="text"
+                   name="answer_{{ outer_index }}_other"
+                   placeholder="Please type your specific answer here..."
+                   class="form-input other-input other-input-{{ outer_index }}">
+        </div>
+        {% endfor %}
+
+        <button type="submit" id="decideBtn" class="decide-btn">
+            ⚖️ Get Final Decision
+        </button>
+    </form>
+</div>
+{% endif %}
+
+<!-- ════════════ PHASE 2: FINAL DECISION DISPLAY ════════════ -->
+{% if decision %}
+<div style="margin-top:30px;">
+    <h3 style="color:#fafafa; font-size:22px; margin-bottom:18px;">
+        ⚖️ Final Refund & Resolution Decision
+    </h3>
+
+    <div class="result-grid">
+        <div class="card">
+            <b>Decision Verdict</b><br><br>
+            {% if decision.verdict == 'Refund Eligible' %}
+            <span style="background:#16a34a; color:white; padding:8px 18px; border-radius:20px; font-weight:bold; display:inline-block;">
+                ✅ Refund Eligible
+            </span>
+            {% elif decision.verdict == 'Partial Refund' %}
+            <span style="background:#ea580c; color:white; padding:8px 18px; border-radius:20px; font-weight:bold; display:inline-block;">
+                ⚠️ Partial Refund
+            </span>
+            {% elif decision.verdict == 'No Refund' %}
+            <span style="background:#dc2626; color:white; padding:8px 18px; border-radius:20px; font-weight:bold; display:inline-block;">
+                ❌ No Refund Applicable
+            </span>
+            {% else %}
+            <span style="background:#2563eb; color:white; padding:8px 18px; border-radius:20px; font-weight:bold; display:inline-block;">
+                ℹ️ Needs Human Review
+            </span>
+            {% endif %}
+        </div>
+
+        <div class="card">
+            <b>Refund Amount</b><br><br>
+            <span style="font-size:22px; font-weight:bold; color:#38bdf8;">
+                ₹{{ decision.amount }}
+            </span>
+        </div>
+
+        <div class="card">
+            <b>Recommended Next Step</b><br><br>
+            <span style="font-size:14px; color:#d4d4d4; line-height:1.6;">
+                {{ decision.advice }}
+            </span>
+        </div>
+    </div>
+
+    <h3 style="margin-top:35px;color:#fafafa;">
+        💬 AI Railway Support Response
+    </h3>
+
+    <div class="reply">
+        {{reply}}
+    </div>
+
+    <!-- ===== HELPLINE SECTION ===== -->
+    <div class="helpline-section">
+        <h3 class="helpline-heading">
+            📞 Still Need Help?
+        </h3>
+
+        <p class="helpline-desc">
+            If the AI response didn't resolve your issue, contact<br>
+            the Indian Railways helpline directly:
+        </p>
+
+        <div class="helpline-buttons">
+            <a href="tel:139" class="helpline-btn">
+                📞 139
+            </a>
+
+            <a href="tel:18001111139" class="helpline-btn">
+                📞 1800-111-139 <span style="font-size:13px;font-weight:normal;">(Toll-Free)</span>
+            </a>
+        </div>
+
+        <p style="color:#8a8a86;font-size:13px;margin:12px 0 0 0;">
+            🕐 Available 24x7 &nbsp;|&nbsp; Indian Railways Customer Care
+        </p>
+    </div>
+    <!-- ===== END HELPLINE SECTION ===== -->
+</div>
+{% endif %}
+
+</div> <!-- analysisResult close -->
+{% endif %}
+
+<div style="text-align:center;margin-top:35px;">
+
+<a href="/history" class="primary-btn">
+📊 Open Complaint Dashboard
+</a>
+
+</div>
+
+</div>   <!-- container close -->
+
+<footer class="footer">
+
+© 2026 Railway Support Ticket Resolution Platform
+<br>
+AI Powered Passenger Complaint Resolution System
+
+</footer>
+
+<script>
+
+function getAnalyzeFields() {
+    return {
+        name: document.getElementById("passengerName"),
+        pnr: document.getElementById("pnr"),
+        complaint: document.getElementById("complaint"),
+        nameError: document.getElementById("nameError"),
+        pnrError: document.getElementById("pnrError"),
+        complaintError: document.getElementById("complaintError"),
+        submitBtn: document.getElementById("analyzeBtn")
+    };
+}
+
+function validate() {
+    const f = getAnalyzeFields();
+    if (!f.name || !f.pnr || !f.complaint) return false;
+
+    const name = f.name.value.trim();
+    const pnr = f.pnr.value;
+    const complaint = f.complaint.value.trim();
+
+    let nameMsg = "";
+    let pnrMsg = "";
+    let complaintMsg = "";
+
+    if (!name) {
+        nameMsg = "Passenger name is required.";
+    }
+
+    if (pnr.length === 0) {
+        pnrMsg = "PNR number is required.";
+    } else if (pnr.length !== 10) {
+        pnrMsg = "PNR must be exactly 10 digits.";
+    }
+
+    if (!complaint) {
+        complaintMsg = "Complaint is required.";
+    } else if (complaint.length < 10) {
+        complaintMsg = "Complaint must be at least 10 characters.";
+    }
+
+    f.nameError.textContent = nameMsg;
+    f.pnrError.textContent = pnrMsg;
+    f.complaintError.textContent = complaintMsg;
+
+    const ok = pnr.length === 10 && !!name && complaint.length >= 10;
+    f.submitBtn.disabled = !ok;
+    return ok;
+}
+
+function startRecognition() {
+
+    if (!('webkitSpeechRecognition' in window)) {
+        alert("Speech Recognition is not supported in this browser.");
+        return;
+    }
+
+    const recognition = new webkitSpeechRecognition();
+
+    recognition.lang = "en-IN";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.start();
+
+    recognition.onstart = function () {
+        document.getElementById("analyzeBtn").innerHTML = "🎙 Listening...";
+    };
+
+    recognition.onresult = function (event) {
+        document.getElementById("complaint").value =
+            event.results[0][0].transcript;
+
+        document.getElementById("analyzeBtn").innerHTML =
+            "🔍 Analyze Complaint";
+        validate();
+    };
+
+    recognition.onerror = function () {
+        alert("Voice recognition failed.");
+        document.getElementById("analyzeBtn").innerHTML =
+            "🔍 Analyze Complaint";
+        validate();
+    };
+
+}
+
+function toggleOther(radio) {
+    const name = radio.name;
+    const otherInput = document.querySelector(`[name="${name}_other"]`);
+    if (otherInput) {
+        if (radio.value === "Other") {
+            otherInput.style.display = "block";
+            otherInput.focus();
+        } else {
+            otherInput.style.display = "none";
+            otherInput.value = "";
+        }
+    }
+}
+
+// Loading state for analyze complaint form
+const mainForm = document.querySelector("form[action='/analyze']");
+if (mainForm) {
+    const pnrInput = document.getElementById("pnr");
+    const nameInput = document.getElementById("passengerName");
+    const complaintInput = document.getElementById("complaint");
+
+    if (pnrInput) {
+        pnrInput.addEventListener("input", function () {
+            pnrInput.value = pnrInput.value.replace(/\D/g, "").slice(0, 10);
+            validate();
+        });
+    }
+    if (nameInput) {
+        nameInput.addEventListener("input", validate);
+        nameInput.addEventListener("blur", validate);
+    }
+    if (complaintInput) {
+        complaintInput.addEventListener("input", validate);
+        complaintInput.addEventListener("blur", validate);
+    }
+
+    mainForm.addEventListener("submit", function (event) {
+        if (!validate()) {
+            event.preventDefault();
+            document.querySelectorAll(".error-msg").forEach(function(el){
+                el.classList.add("visible");
+            });
+            return;
+        }
+        document.getElementById("analyzeBtn").innerHTML =
+            "⏳ Analyzing Complaint...";
+    });
+
+    validate();
+}
+
+// Loading state for clarify/decide form
+const clarifyForm = document.getElementById("clarifyForm");
+if (clarifyForm) {
+    clarifyForm.addEventListener("submit", function () {
+        const btn = document.getElementById("decideBtn");
+        if (btn) {
+            btn.innerHTML = "⏳ Processing Decision...";
+            btn.style.opacity = "0.7";
+        }
+    });
+}
+
+// Smooth scroll to results/questions if present
+window.addEventListener("DOMContentLoaded", function () {
+    const resultEl = document.getElementById("analysisResult");
+    if (resultEl) {
+        resultEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+});
+</script>
+
+</body>
+
+</html>
